@@ -5,6 +5,8 @@ import './canvas.scss';
 import UniqueKeyGenTable from '../../models/key-table';
 import componentProps from '../../config/component-props';
 
+import InputComponent from '../input/input';
+
 class DropCanvas extends Component {
     state = {
         componentMarkups: {}
@@ -21,14 +23,10 @@ class DropCanvas extends Component {
         droppedComponents = !droppedComponents ? {} : JSON.parse(droppedComponents);
         let target = document.getElementById('canvas');
         let componentIds = Object.keys(droppedComponents);
-        // droppedComponents.forEach((item, i) => {
-        //     this.renderElement(target, item.componentType, item.x, item.y);
-        // });
         componentIds.forEach((id, i) => {
             let item = droppedComponents[id];
             this.renderElement(target, item.componentType, id, item.x, item.y)
         });
-
     }
 
     listenDragStart(ev) {
@@ -52,6 +50,17 @@ class DropCanvas extends Component {
         return false;
     }
 
+    renderAllElements() {
+        let droppedComponents = localStorage.getItem('droppedComponents');
+        droppedComponents = !droppedComponents ? {} : JSON.parse(droppedComponents);
+        let target = document.getElementById('canvas');
+        let componentIds = Object.keys(droppedComponents);
+        componentIds.forEach((id, i) => {
+            let item = droppedComponents[id];
+            this.renderElement(target, item.componentType, id, item.x, item.y)
+        });
+    }
+
     moveElement(event) {
         console.log('moving...')
         let target = event.target;
@@ -62,23 +71,26 @@ class DropCanvas extends Component {
 
         let { width, height } = {...componentProps[elmMeta.componentType]};
         // console.log(x, y, width, height, target.name, componentProps[elmMeta.componentType]);
-        x -= width/2;
-        y -= height/2;
+        // x -= width/2;
+        // y -= height/2;
 
-        elmMeta.x = x;
-        elmMeta.y = y;
         // let elm = this.getMarkupByType(elmMeta.componentType, event.target.id, elmMeta.x, elmMeta.y);
+
         let parent = target.parentNode;
+
         // this.renderElement(target.parentNode, elmMeta.componentType, target.name, elmMeta.x, elmMeta.y);
-        this.saveElement(elmMeta.componentType, target.id, elmMeta.x, elmMeta.y);
-        let elm = this.getMarkupByType(elmMeta.componentType, target.id, elmMeta.x, elmMeta.y, width, height);
-        let map = this.state.componentMarkups;
-        map[target.id] = <span id={target.name+"-wrapper"}  key={target.name+"-wrapper"}> {elm} </span>;
-        this.setState({
-            componentMarkups: map
-        });
-        ReactDOM.unmountComponentAtNode(parent)
-        ReactDOM.render(elm, parent);
+
+        this.saveElement(elmMeta.componentType, target.id, x, y);
+        this.renderAllElements();
+
+        // let elm = this.getMarkupByType(elmMeta.componentType, target.id, elmMeta.x, elmMeta.y, width, height);
+        // let map = this.state.componentMarkups;
+        // map[target.id] = <span id={target.name+"-wrapper"}  key={target.name+"-wrapper"}> {elm} </span>;
+        // this.setState({
+        //     componentMarkups: map
+        // });
+        // // ReactDOM.unmountComponentAtNode(parent)
+        // ReactDOM.render(elm, parent);
     }
 
     saveElement(type, id, x, y) {
@@ -151,10 +163,13 @@ class DropCanvas extends Component {
         let domElm;
         switch (type) {
             case 'input':
-                    domElm =    <input type="text" id={id} name={id} onDragStart={this.listenDragStart}
-                                    onDragEnd={this.moveElement} draggable
-                                    style={{position:"absolute", left:x+"px", top:y+"px",
-                                            width: width+"px", height: height+"px"}}/>
+                    // domElm =    <input type="text" id={id} name={id} onDragStart={this.listenDragStart}
+                    //                 onDragEnd={this.moveElement} draggable
+                    //                 style={{position:"absolute", left:x+"px", top:y+"px",
+                    //                         width: width+"px", height: height+"px"}}/>
+                    domElm =    <InputComponent id={id} name={id} x={x} y={y} width={width} height={height}
+                                    listenDragStart={this.listenDragStart} moveElement={this.moveElement}>
+                                </InputComponent>
                     break;
             case 'select':
                     domElm =    <select id={id} name={id} onDragStart={this.listenDragStart}
