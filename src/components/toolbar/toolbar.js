@@ -26,7 +26,6 @@ class Toolbar extends Component {
     }
 
     listenDragStart(ev) {
-        console.log("dragStart");
         ev.dataTransfer.setData("text/plain", ev.target.id);
     }
 
@@ -43,7 +42,7 @@ class Toolbar extends Component {
                     onDragStart={this.listenDragStart} draggable="true">Paragraph</li>
                 <li className="tool" id="heading" key="heading"
                     onDragStart={this.listenDragStart} draggable="true">Heading</li>
-                <li className="tool" id="button" key="button" 
+                <li className="tool" id="button" key="button"
                     onDragStart={this.listenDragStart} draggable="true">Button</li>
             </ul>
         );
