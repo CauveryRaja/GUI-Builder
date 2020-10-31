@@ -1,23 +1,23 @@
 import logo from './logo.svg';
 import './App.css';
 
+import Toolbar from './components/toolbar/toolbar';
+import DropCanvas from './components/canvas/canvas';
+
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <header>
+            <h2 className="app-title">React Studio</h2>
+        </header>
+        <main>
+            <section className="panel-left">
+                <Toolbar></Toolbar>
+            </section>
+            <section className="panel-right">
+                <DropCanvas></DropCanvas>
+            </section>
+        </main>
     </div>
   );
 }
