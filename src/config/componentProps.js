@@ -1,15 +1,15 @@
 const componentProps = {
     input: {
-        width: 100,
-        height: 20
+        width: 125,
+        height: 25
     },
     select: {
-        width: 100,
-        height: 20
+        width: 125,
+        height: 25
     },
     textarea: {
-        width: 100,
-        height: 100
+        width: 120,
+        height: 120
     },
     paragraph: {
         width: 100,
