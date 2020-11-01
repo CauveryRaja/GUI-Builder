@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import Toolbar from './components/toolbar/toolbar';
-import DropCanvas from './components/canvas/canvas';
+import DropCanvas from './components/canvas/canvas-new';
 
 function App() {
   return (
