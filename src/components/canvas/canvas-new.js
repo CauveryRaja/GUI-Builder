@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './canvas.scss';
 
-import UniqueKeyGenTable from '../../models/key-table';
-import componentProps from '../../config/component-props';
+import UniqueKeyGenMap from '../../models/keyMap';
+import componentProps from '../../config/componentProps';
 
 import ComponentRenderer from '../componentRenderer/componentRenderer';
+import CanvasToolbar from '../canvasToolbar/canvasToolbar';
 
 class DropCanvas extends Component {
 
@@ -15,7 +16,7 @@ class DropCanvas extends Component {
             componentsMarkup: {},
             componentsMetaInfo: {}
         };
-        this.keyMap = new UniqueKeyGenTable();
+        this.keyMap = new UniqueKeyGenMap();
         this.bindEventListeners();
     }
 
@@ -29,7 +30,7 @@ class DropCanvas extends Component {
         let componentIds = Object.keys(droppedComponents);
         componentIds.forEach((id, i) => {
             let item = droppedComponents[id];
-            this.renderElement(target, item.componentType, id, item.x, item.y)
+            this.renderElement(target, item.componentType, id, item.x, item.y);
         });
     }
 
@@ -55,6 +56,7 @@ class DropCanvas extends Component {
     }
 
     moveElement(event) {
+        event.preventDefault();
         let target = event.target;
         let {x, y} = this.computeCoordinates(event);
         this.renderElement(document.getElementById('canvas'),
@@ -83,13 +85,11 @@ class DropCanvas extends Component {
         if(save)
             this.saveElement(type, id, x, y);
         this.setState((state, props) => {
-            let elm =   <ComponentRenderer id={id}
-                            key={id}
+            let elm =   <ComponentRenderer id={id} key={id}
                             componentType={type}
                             x={state.componentsMetaInfo[id].x}
                             y={state.componentsMetaInfo[id].y}
-                            width={width}
-                            height={height}
+                            width={width} height={height}
                             listenDragStart={this.listenDragStart}
                             moveElement={this.moveElement}>
                         </ComponentRenderer>
@@ -117,6 +117,27 @@ class DropCanvas extends Component {
         };
     }
 
+    computeOverlappingRegion(type, id, x, y) {
+        let componentIds = Object.keys(this.state.componentsMetaInfo);
+        let offset = {
+            x: 0,
+            y: 0
+        };
+        for(let i=0; i<componentIds.length; i++) {
+            let item = this.state.componentsMetaInfo[componentIds[i]];
+            let {width, height} = {...componentProps[item.componentType]};
+            if(item.x<=x && x<=item.x+width) {
+                if(item.y<=y && y<=item.y+height) {
+                    offset['x'] = item.x+width - x;
+                    offset['y'] = item.y+height - y;
+                    break;
+                }
+            }
+        }
+        console.log(offset);
+        return offset;
+    }
+
     clearCanvas() {
         ReactDOM.unmountComponentAtNode(document.getElementById('canvas'));
         localStorage.setItem('droppedComponents', '');
@@ -124,16 +145,13 @@ class DropCanvas extends Component {
             componentsMarkup: {},
             componentsMetaInfo: {}
         });
-        this.keyMap = new UniqueKeyGenTable();
+        this.keyMap.initMap();
     }
 
     render() {
         return (
             <React.Fragment>
-                <ul id="toolbar">
-                    <li onClick={this.clearCanvas} key="clear">Clear</li>
-                    <li key="settings">Settings</li>
-                </ul>
+                <CanvasToolbar clearCanvas={this.clearCanvas}></CanvasToolbar>
                 <div className="canvasContainer">
                     <div id="canvas" onDrop={this.listenDragEnd} onDragOver={this.listenDragOver}>
                     </div>

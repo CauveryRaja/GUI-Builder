@@ -3,26 +3,8 @@
     width: 100%;
 }
 
-#toolbar {
-    display: flex;
-    flex-direction: row-reverse;
-}
-
-#toolbar li {
-    display: inline-block;
-    list-style: none;
-    margin: 5px;
-    padding: 10px;
-    background: lightgrey;
-    cursor: pointer;
-}
-
-#toolbar li:hover {
-    background-color: #bfbaba;
-}
-
 #canvas {
-    width: 89vw;
+    width: 85vw;
     height: 80vh;
     border: 1px dashed grey;
     border-radius: 5px;

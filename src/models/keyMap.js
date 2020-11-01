@@ -1,4 +1,4 @@
-class UniqueKeyGenTable {
+class UniqueKeyGenMap {
     constructor() {
         this.keyMap = {
             input: 0,
@@ -9,6 +9,18 @@ class UniqueKeyGenTable {
             button: 0
         };
         this.fetchFromStorage();
+    }
+
+    initMap() {
+        this.keyMap = {
+            input: 0,
+            select: 0,
+            textarea: 0,
+            paragraph: 0,
+            heading: 0,
+            button: 0
+        };
+        localStorage.setItem('keyMap', JSON.stringify(this.keyMap));
     }
 
     fetchFromStorage() {
@@ -28,4 +40,4 @@ class UniqueKeyGenTable {
     }
 }
 
-export default UniqueKeyGenTable;
+export default UniqueKeyGenMap;

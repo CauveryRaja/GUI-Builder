@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './canvas.scss';
 
-import UniqueKeyGenTable from '../../models/key-table';
-import componentProps from '../../config/component-props';
+import UniqueKeyGenMap from '../../models/keyMap';
+import componentProps from '../../config/componentProps';
 
-import InputComponent from '../input/input';
+import InputComponent from '../input/inputComponent';
 
 class DropCanvas extends Component {
     state = {
@@ -14,7 +14,7 @@ class DropCanvas extends Component {
 
     constructor() {
         super();
-        this.keyMap = new UniqueKeyGenTable();
+        this.keyMap = new UniqueKeyGenMap();
         this.bindEventListeners();
     }
 

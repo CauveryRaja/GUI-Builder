@@ -1,28 +1,18 @@
 import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './toolbar.scss';
+
+import componentList from '../../config/componentList';
+import fontawesome from '../../utils/fontAwesome';
 
 class Toolbar extends Component {
 
-    state = {
-        components: []
-    }
-
     constructor() {
         super();
+        this.state = {
+            components: componentList
+        }
         this.listenDragStart = this.listenDragStart.bind(this);
-    }
-
-    componentDidMount() {
-
-            // this.state.components.map(item => {
-            //      (
-            //         <li className="tool"
-            //             id="input"
-            //             onDragStart={this.listenDragStart}
-            //             draggable="true">
-            //         Input
-            //         </li> )
-            // });
     }
 
     listenDragStart(ev) {
@@ -30,52 +20,17 @@ class Toolbar extends Component {
     }
 
     render() {
-        return (
-            <ul className="toolbar">
-                <li className="tool" key="input" id="input"
-                    onDragStart={this.listenDragStart} draggable="true">Input</li>
-                <li className="tool" id="select" key="select"
-                    onDragStart={this.listenDragStart} draggable="true">Select</li>
-                <li className="tool" id="textarea" key="textarea"
-                    onDragStart={this.listenDragStart} draggable="true">Text Area</li>
-                <li className="tool" id="paragraph" key="paragraph"
-                    onDragStart={this.listenDragStart} draggable="true">Paragraph</li>
-                <li className="tool" id="heading" key="heading"
-                    onDragStart={this.listenDragStart} draggable="true">Heading</li>
-                <li className="tool" id="button" key="button"
-                    onDragStart={this.listenDragStart} draggable="true">Button</li>
-            </ul>
-        );
-    }
-
-    initComponents() {
-        this.setState({
-            components: [{
-                id: 'input',
-                name: 'Input'
-            },
-            {
-                id: 'select',
-                name: 'Select'
-            },
-            {
-                id: 'textarea',
-                name: 'Text Area'
-            },
-            {
-                id: 'paragraph',
-                name: 'Paragraph'
-            },
-            {
-                id: 'heading',
-                name: 'Heading'
-            },
-            {
-                id: 'button',
-                name: 'Button'
-            }
-        ]
-        })
+        return this.state.components.map(component => (
+                <li className="tool"
+                    id={component.id} key={component.id}
+                    onDragStart={this.listenDragStart}
+                    draggable="true">
+                        <span className="tool-icon">
+                            <FontAwesomeIcon icon={component.icon}/>
+                        </span>
+                        {component.name}
+                </li>
+        ));
     }
 }
 

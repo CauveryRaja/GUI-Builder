@@ -3,11 +3,16 @@ ul.toolbar {
 }
 
 li.tool {
-    /* display: inline-block; */
     cursor: move;
     text-decoration: none;
     list-style: none;
     padding: 10px;
     margin: 5px;
-    background: lightgrey;
+    text-align: center;
+    border: 1px solid grey;
+    width: 8rem;
+}
+
+.tool-icon {
+    margin-right: 0.7rem;
 }

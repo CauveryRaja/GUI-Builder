@@ -1,0 +1,24 @@
+ul {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+ul li {
+    display: inline-block;
+    list-style: none;
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid grey;
+    border-radius: 25px;
+    width: 7rem;
+}
+
+ul li:hover {
+    background-color: #f7f4f4;
+}
+
+.tool-icon {
+    margin-right: 0.3rem;
+}
