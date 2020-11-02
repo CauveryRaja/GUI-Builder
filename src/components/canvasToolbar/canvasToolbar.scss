@@ -13,10 +13,12 @@ ul li {
     border: 1px solid grey;
     border-radius: 25px;
     width: 7rem;
-}
 
-ul li:hover {
-    background-color: #f7f4f4;
+    &:hover {
+        border-color: #f3a01f;
+        color: #f3a01f;
+        background-color: #483232;
+    }
 }
 
 .tool-icon {

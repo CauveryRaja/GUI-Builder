@@ -1,7 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 import { faPlus, faEdit, faTrash, faICursor, faSquare, faParagraph,
-        faHeading, faFont, faThList, faCog }
+        faHeading, faFont, faThList, faCog, faFile, faPaintBrush }
         from '@fortawesome/free-solid-svg-icons';
 
 // import { faHeader }
@@ -18,5 +18,7 @@ library.add(
   faHeading,
   faFont,
   faThList,
-  faCog
+  faCog,
+  faFile,
+  faPaintBrush
 );

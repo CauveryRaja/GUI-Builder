@@ -7,10 +7,20 @@ li.tool {
     text-decoration: none;
     list-style: none;
     padding: 10px;
-    margin: 5px;
+    margin: 10px 5px;
     text-align: center;
-    border: 1px solid grey;
+    border: 1px solid #f3a01f;
+    color: #f3a01f;
+    background: #483232;
+    border-radius: 5px;
     width: 8rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    &:hover {
+        border-color: #313131;
+        color: #313131;
+        background-color: #f3a01f;
+    }
 }
 
 .tool-icon {

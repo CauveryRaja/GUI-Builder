@@ -1,0 +1,35 @@
+.field-toolbar {
+    padding: 10px 0;
+    text-align: right;
+    display: none;
+}
+
+.field-tool {
+    padding: 8px;
+    // background: #f9f9f9;
+    background: #313131;
+    color: white;
+    border-radius: 50%;
+    margin-left: 8px;
+    font-size: 0.9rem;
+    border: 1px solid;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    &:hover:not(.active) {
+        color: #f3a01f;
+        border-color: #f3a01f;
+    }
+}
+
+.active {
+    background: #f3a01f;
+    color: #313131;
+}
+
+.field-wrapper:hover {
+    .field-toolbar {
+        display: inline-block;
+    }
+}
