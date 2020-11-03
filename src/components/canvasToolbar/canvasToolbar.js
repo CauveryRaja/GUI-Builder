@@ -18,7 +18,7 @@ class CanvasToolbar extends Component {
                     <span className="tool-icon">
                         <FontAwesomeIcon icon="cog"/>
                     </span>
-                    Settings
+                    Changes will be Auto saved {this.props.componentCount}
                 </li>
             </ul>
         )

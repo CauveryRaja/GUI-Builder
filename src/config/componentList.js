@@ -4,11 +4,6 @@ const componentList = [{
     icon: 'i-cursor'
 },
 {
-    id: 'select',
-    name: 'Select',
-    icon: 'th-list'
-},
-{
     id: 'textarea',
     name: 'Text Area',
     icon: 'font'

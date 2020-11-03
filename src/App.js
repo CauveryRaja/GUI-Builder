@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.scss';
 
 import Toolbar from './components/toolbar/toolbar';
-import DropCanvas from './components/canvas/canvas-new';
+import DropCanvas from './components/canvas/canvas';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import fontawesome from './utils/fontAwesome';

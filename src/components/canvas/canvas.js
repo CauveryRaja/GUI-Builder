@@ -5,15 +5,18 @@ import './canvas.scss';
 import UniqueKeyGenMap from '../../models/keyMap';
 import componentProps from '../../config/componentProps';
 
-import InputComponent from '../input/inputComponent';
+import ComponentRenderer from '../componentRenderer/componentRenderer';
+import CanvasToolbar from '../canvasToolbar/canvasToolbar';
 
 class DropCanvas extends Component {
-    state = {
-        componentMarkups: {}
-    };
 
     constructor() {
         super();
+        this.state = {
+            componentsMarkup: {},
+            componentsMetaInfo: {},
+            size: 0
+        };
         this.keyMap = new UniqueKeyGenMap();
         this.bindEventListeners();
     }
@@ -21,17 +24,22 @@ class DropCanvas extends Component {
     componentDidMount() {
         let droppedComponents = localStorage.getItem('droppedComponents');
         droppedComponents = !droppedComponents ? {} : JSON.parse(droppedComponents);
+        this.setState({
+            componentsMetaInfo: droppedComponents
+        })
         let target = document.getElementById('canvas');
         let componentIds = Object.keys(droppedComponents);
+        this.setState({
+            size: componentIds.length
+        })
         componentIds.forEach((id, i) => {
             let item = droppedComponents[id];
-            this.renderElement(target, item.componentType, id, item.x, item.y)
+            this.renderElement(target, item.componentType, id, item.x, item.y);
         });
     }
 
     listenDragStart(ev) {
         ev.dataTransfer.setData("text/plain", "move");
-        // ReactDOM.unmountComponentAtNode(ev.target.parentNode);
     }
 
     listenDragOver(e) {
@@ -39,86 +47,67 @@ class DropCanvas extends Component {
     }
 
     listenDragEnd(e) {
+        e.preventDefault();
         e.dataTransfer.effectAllowed = 'move';
         let elmType = e.dataTransfer.getData('text/plain');
         if(elmType==='move') {
             // this.moveElement(e.target, x, y);
             return;
         }
+        this.setState({
+            size: this.state.size+1
+        })
         let {x, y} = this.computeCoordinates(e);
-        this.renderElement(e.target, elmType, this.keyMap.getUniqueId(elmType), x, y);
+        this.renderElement(e.target, elmType, this.keyMap.getUniqueId(elmType), x, y, true);
         return false;
     }
 
-    renderAllElements() {
-        let droppedComponents = localStorage.getItem('droppedComponents');
-        droppedComponents = !droppedComponents ? {} : JSON.parse(droppedComponents);
-        let target = document.getElementById('canvas');
-        let componentIds = Object.keys(droppedComponents);
-        componentIds.forEach((id, i) => {
-            let item = droppedComponents[id];
-            this.renderElement(target, item.componentType, id, item.x, item.y)
-        });
-    }
-
     moveElement(event) {
-        console.log('moving...')
+        event.preventDefault();
         let target = event.target;
         let {x, y} = this.computeCoordinates(event);
-        let droppedComponents = localStorage.getItem('droppedComponents');
-        droppedComponents = !droppedComponents ? {} : JSON.parse(droppedComponents);
-        let elmMeta = droppedComponents[target.id];
-
-        let { width, height } = {...componentProps[elmMeta.componentType]};
-        // console.log(x, y, width, height, target.name, componentProps[elmMeta.componentType]);
-        // x -= width/2;
-        // y -= height/2;
-
-        // let elm = this.getMarkupByType(elmMeta.componentType, event.target.id, elmMeta.x, elmMeta.y);
-
-        let parent = target.parentNode;
-
-        // this.renderElement(target.parentNode, elmMeta.componentType, target.name, elmMeta.x, elmMeta.y);
-
-        this.saveElement(elmMeta.componentType, target.id, x, y);
-        this.renderAllElements();
-
-        // let elm = this.getMarkupByType(elmMeta.componentType, target.id, elmMeta.x, elmMeta.y, width, height);
-        // let map = this.state.componentMarkups;
-        // map[target.id] = <span id={target.name+"-wrapper"}  key={target.name+"-wrapper"}> {elm} </span>;
-        // this.setState({
-        //     componentMarkups: map
-        // });
-        // // ReactDOM.unmountComponentAtNode(parent)
-        // ReactDOM.render(elm, parent);
+        this.renderElement(document.getElementById('canvas'),
+                            this.state.componentsMetaInfo[target.id].componentType, target.id, x, y, true);
     }
 
     saveElement(type, id, x, y) {
         let droppedComponents = localStorage.getItem('droppedComponents');
         droppedComponents = !droppedComponents ? {} : JSON.parse(droppedComponents);
+        let { width, height } = {...componentProps[type]};
+        x -= width/2;
+        y -= height/2;
         droppedComponents[id] = {
             componentType: type,
             x: x,
             y: y
         };
         localStorage.setItem('droppedComponents', JSON.stringify(droppedComponents));
+        this.setState({
+            componentsMetaInfo: droppedComponents
+        });
     }
 
-    renderElement(target, type, id, x, y) {
+    renderElement(target, type, id, x, y, save) {
         let { width, height } = {...componentProps[type]};
-        this.saveElement(type, id, x, y);
-        x -= width/2;
-        y -= height/2;
-        let elm = this.getMarkupByType(type, id, x, y, width, height);
-        let map = this.state.componentMarkups;
-        map[id] =   <span id={id+"-wrapper"} key={id+"-wrapper"}>
-                        {elm}
-                    </span>;
-        this.setState({
-            componentMarkups: map
+        if(save)
+            this.saveElement(type, id, x, y);
+        this.setState((state, props) => {
+            let elm =   <ComponentRenderer id={id} key={id}
+                            componentType={type}
+                            x={state.componentsMetaInfo[id].x}
+                            y={state.componentsMetaInfo[id].y}
+                            width={width} height={height}
+                            listenDragStart={this.listenDragStart}
+                            moveElement={this.moveElement}>
+                        </ComponentRenderer>
+            let map = state.componentsMarkup;
+            map[id] = elm;
+            ReactDOM.render(<React.Fragment>{Object.values(map)}</React.Fragment>, target);
+            return {
+                ...state,
+                componentsMarkup: map
+            }
         });
-        ReactDOM.render(Object.values(this.state.componentMarkups), target);
-        // ReactDOM.render(elm, target);
     }
 
     computeCoordinates(event) {
@@ -127,6 +116,10 @@ class DropCanvas extends Component {
         let rect = canvas.getBoundingClientRect();
         startX = rect.x;
         startY = rect.y;
+        /*  Firefox Open Issue
+            event.client/page is not populated in Firefox.
+            Visit "https://bugzilla.mozilla.org/show_bug.cgi?id=505521#c80"
+        */
         offsetX = event.clientX - startX;
         offsetY = event.clientY - startY;
         return {
@@ -135,82 +128,48 @@ class DropCanvas extends Component {
         };
     }
 
+    computeOverlappingRegion(type, id, x, y) {
+        let componentIds = Object.keys(this.state.componentsMetaInfo);
+        let offset = {
+            x: 0,
+            y: 0
+        };
+        for(let i=0; i<componentIds.length; i++) {
+            let item = this.state.componentsMetaInfo[componentIds[i]];
+            let {width, height} = {...componentProps[item.componentType]};
+            if(item.x<=x && x<=item.x+width) {
+                if(item.y<=y && y<=item.y+height) {
+                    offset['x'] = item.x+width - x;
+                    offset['y'] = item.y+height - y;
+                    break;
+                }
+            }
+        }
+        console.log(offset);
+        return offset;
+    }
+
     clearCanvas() {
         ReactDOM.unmountComponentAtNode(document.getElementById('canvas'));
         localStorage.setItem('droppedComponents', '');
         this.setState({
-            componentMarkups: []
+            componentsMarkup: {},
+            componentsMetaInfo: {},
+            size: 0
         });
-        // this.keyMap = new UniqueKeyGenTable();
+        this.keyMap.initMap();
     }
 
     render() {
         return (
             <React.Fragment>
-                <ul id="toolbar">
-                    <li onClick={this.clearCanvas} key="clear">Clear</li>
-                    <li key="settings">Settings</li>
-                </ul>
+                <CanvasToolbar clearCanvas={this.clearCanvas} componentCount={this.state.size}></CanvasToolbar>
                 <div className="canvasContainer">
                     <div id="canvas" onDrop={this.listenDragEnd} onDragOver={this.listenDragOver}>
                     </div>
                 </div>
             </React.Fragment>
         );
-    }
-
-    getMarkupByType(type, id, x, y, width, height) {
-        let domElm;
-        switch (type) {
-            case 'input':
-                    // domElm =    <input type="text" id={id} name={id} onDragStart={this.listenDragStart}
-                    //                 onDragEnd={this.moveElement} draggable
-                    //                 style={{position:"absolute", left:x+"px", top:y+"px",
-                    //                         width: width+"px", height: height+"px"}}/>
-                    domElm =    <InputComponent id={id} name={id} x={x} y={y} width={width} height={height}
-                                    listenDragStart={this.listenDragStart} moveElement={this.moveElement}>
-                                </InputComponent>
-                    break;
-            case 'select':
-                    domElm =    <select id={id} name={id} onDragStart={this.listenDragStart}
-                                    onDragEnd={this.moveElement} draggable
-                                    style={{position:"absolute", left:x+"px", top:y+"px",
-                                            width: width+"px", height: height+"px"}}>
-                                </select>
-                    break;
-            case 'textarea':
-                    domElm =    <textarea id={id} name={id} onDragStart={this.listenDragStart}
-                                    onDragEnd={this.moveElement} draggable
-                                    style={{position:"absolute", left:x+"px", top:y+"px",
-                                            width: width+"px", height: height+"px"}}>
-                                </textarea>
-                    break;
-            case 'paragraph':
-                domElm =        <p id={id} onDragStart={this.listenDragStart}
-                                    onDragEnd={this.moveElement} draggable
-                                    style={{position:"absolute", left:x+"px", top:y+"px",
-                                            width: width+"px", height: height+"px"}}>
-                                    {id}
-                                </p>
-                break;
-            case 'heading':
-                domElm =        <h2 id={id} onDragStart={this.listenDragStart}
-                                    onDragEnd={this.moveElement} draggable
-                                    style={{position:"absolute", left:x+"px", top:y+"px",
-                                            width: width+"px", height: height+"px"}}>
-                                    {id}
-                                </h2>
-                break;
-            case 'button':
-                domElm =        <button id={id} onDragStart={this.listenDragStart}
-                                    onDragEnd={this.moveElement} draggable
-                                    style={{position:"absolute", left:x+"px", top:y+"px",
-                                            width: width+"px", height: height+"px"}}>
-                                    {id}
-                                </button>
-                break;
-        }
-        return domElm;
     }
 
     bindEventListeners() {
@@ -220,6 +179,7 @@ class DropCanvas extends Component {
         this.moveElement = this.moveElement.bind(this);
         this.computeCoordinates = this.computeCoordinates.bind(this);
         this.renderElement = this.renderElement.bind(this);
+        this.saveElement = this.saveElement.bind(this);
     }
 }
 
