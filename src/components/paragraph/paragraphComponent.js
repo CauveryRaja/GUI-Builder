@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './paragraph.scss';
 
 class ParagraphComponent extends Component {
+    /**
+     * Lifecycle method that renders React Elements in DOM
+     */
     render() {
         return (
             <p id={this.props.id} name={this.props.id} onDragStart={this.props.listenDragStart}

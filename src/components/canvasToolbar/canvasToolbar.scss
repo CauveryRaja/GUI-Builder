@@ -5,6 +5,7 @@ ul {
 
 ul li {
     display: inline-block;
+    position: relative;
     list-style: none;
     margin: 5px;
     padding: 10px;
@@ -12,13 +13,31 @@ ul li {
     text-align: center;
     border: 1px solid grey;
     border-radius: 25px;
-    // width: 7rem;
+
+    .countIndicator {
+        position: absolute;
+        right: 5px;
+        top: -10px;
+        border-radius: 50%;
+        background-color: #f3a01f;
+        padding: 1px 5px;
+        font-size: 0.8rem;
+    }
 
     &:hover {
         border-color: #f3a01f;
         color: #f3a01f;
         background-color: #483232;
+        .countIndicator {
+            color: black;
+        }
     }
+
+}
+
+.autosave-msg {
+    margin: 5px;
+    padding: 10px;
 }
 
 .tool-icon {

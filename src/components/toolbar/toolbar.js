@@ -15,10 +15,17 @@ class Toolbar extends Component {
         this.listenDragStart = this.listenDragStart.bind(this);
     }
 
-    listenDragStart(ev) {
-        ev.dataTransfer.setData("text/plain", ev.target.id);
+    /**
+     * Called when a Component is dragged from the list
+     * @param {SyntheticEvent} event Event object
+     */
+    listenDragStart(event) {
+        event.dataTransfer.setData("text/plain", event.target.id);
     }
 
+    /**
+     * Lifecycle method that renders React Elements in DOM
+     */
     render() {
         return this.state.components.map(component => (
                 <li className="tool"

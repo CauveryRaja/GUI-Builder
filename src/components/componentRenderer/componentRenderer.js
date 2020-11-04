@@ -9,6 +9,9 @@ import ButtonComponent from '../button/buttonComponent';
 
 class ComponentRenderer extends Component {
 
+    /**
+     * Returns React Element based on Component type 
+     */
     getComponentByType() {
         let domElm;
         switch (this.props.componentType) {
@@ -60,6 +63,9 @@ class ComponentRenderer extends Component {
         return domElm;
     }
 
+    /**
+     * Lifecycle method that renders React Elements in DOM
+     */
     render() {
         return this.getComponentByType(this.props.componentType);
     }

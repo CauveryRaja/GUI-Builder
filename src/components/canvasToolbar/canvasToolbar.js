@@ -5,20 +5,18 @@ import './canvasToolbar.scss';
 import fontawesome from '../../utils/fontAwesome';
 
 class CanvasToolbar extends Component {
+    /**
+     * Lifecycle method that renders React Elements in DOM
+     */
     render() {
         return (
             <ul id="canvas-toolbar">
-                <li onClick={this.props.clearCanvas} key="clear">
+                <li className="action-btn" onClick={this.props.clearCanvas} key="clear">
                     <span className="tool-icon">
                         <FontAwesomeIcon icon="trash"/>
                     </span>
                     Clear All
-                </li>
-                <li key="settings">
-                    <span className="tool-icon">
-                        <FontAwesomeIcon icon="cog"/>
-                    </span>
-                    Changes will be Auto saved {this.props.componentCount}
+                    <span className="countIndicator">{this.props.componentCount}</span>
                 </li>
             </ul>
         )

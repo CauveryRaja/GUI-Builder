@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './textarea.scss';
 
 class TextAreaComponent extends Component {
+    /**
+     * Lifecycle method that renders React Elements in DOM
+     */
     render() {
         return (
             <textarea id={this.props.id} name={this.props.id} onDragStart={this.props.listenDragStart}

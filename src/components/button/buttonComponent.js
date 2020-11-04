@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './button.scss';
 
 class ButtonComponent extends Component {
+    /**
+     * Lifecycle method that renders React Elements in DOM
+     */
     render() {
         return (
             <button id={this.props.id} name={this.props.id} onDragStart={this.props.listenDragStart}

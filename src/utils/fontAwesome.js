@@ -9,16 +9,6 @@ import { faPlus, faEdit, faTrash, faICursor, faSquare, faParagraph,
 
 
 library.add(
-  faPlus,
-  faEdit,
-  faTrash,
-  faICursor,
-  faSquare,
-  faParagraph,
-  faHeading,
-  faFont,
-  faThList,
-  faCog,
-  faFile,
-  faPaintBrush
+  faPlus, faEdit, faTrash, faICursor, faSquare, faParagraph, faHeading,
+  faFont, faThList, faCog, faFile, faPaintBrush
 );

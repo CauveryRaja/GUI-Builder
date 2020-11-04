@@ -12,12 +12,19 @@ class InputComponent extends Component {
         }
     }
 
+    /**
+     * Set Input type from the input type
+     * @param {string} inputType Selected Input field type
+     */
     listenToolClick(inputType) {
         this.setState({
             type: inputType
         })
     }
 
+    /**
+     * Lifecycle method that renders React Elements in DOM
+     */
     render() {
         return (
             <span className="field-wrapper">

@@ -12,12 +12,19 @@ class HeadingComponent extends Component {
         }
     }
 
+    /**
+     * Set Heading type from the input type
+     * @param {string} headingType Selected Heading type
+     */
     listenToolClick(headingType) {
         this.setState({
             type: headingType
         })
     }
 
+    /**
+     * Lifecycle method that renders React Elements in DOM
+     */
     render() {
         let elm = React.createElement(this.state.type, {
                             id: this.props.id,
