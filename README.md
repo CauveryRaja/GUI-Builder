@@ -25,8 +25,8 @@ Following are the list of components supported.
 ## Setting up the project
   Follow the steps if you are trying to setup this project.
   * Download/Fork this repository
-  * Run npm install to install required dependencies
-  * Run npm start to run the application in the Development server.
+  * Run `npm install` to install required dependencies
+  * Run `npm start` to run the application in the Development server.
   
 ## License
 This project is licensed under [MIT License](https://github.com/CauveryRaja/gui-builder/blob/main/LICENSE)
