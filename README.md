@@ -1,7 +1,7 @@
 # React Studio
 
 A Drag-n-Drop based **GUI builder** application primarily developed using React.
-Components can be dragged and dropped into the Canvas area. Inserted components can be moved anywhere within the Canvas.
+Components can be dragged and dropped into the Canvas area. Inserted components can be moved anywhere within the Canvas area.
 
 ## Demo
 Feel free to take a look at the [Demo](https://cauveryraja.github.io/gui-builder/)
